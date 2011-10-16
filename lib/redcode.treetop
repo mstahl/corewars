@@ -1,0 +1,79 @@
+
+grammar Redcode
+  rule assembly_file
+    list
+  end
+
+  rule list
+    line / line list
+  end
+  
+  rule line
+    comment / instruction
+  end
+  
+  rule comment
+    ";" .* $ / $
+  end
+  
+  rule instruction
+    label_list? operation mode field comment 
+    /
+    label_list? operation mode expr "," mode expr comment
+  end
+  
+  rule label_list
+    label / label label_list / label newline label_list
+  end
+  
+  rule label
+    [a-zA-Z] [a-zA-Z0-9]*
+  end
+  
+  rule operation
+    opcode / opcode.modifier
+  end
+  
+  rule opcode
+    "DAT" / "MOV" / "ADD" / "SUB" / "MUL" / "DIV" / "MOD" /
+    "JMP" / "JMZ" / "JMN" / "DJN" / "CMP" / "SLT" / "SPL" /
+    "ORG" / "EQU" / "END"
+  end
+  
+  rule modifier
+    "A" / "B" / "AB" / "BA" / "F" / "X" / "I"
+  end
+  
+  rule mode
+    "#" / "$" / "@" / "<" / ">" / ''
+  end
+  
+  rule expr
+    term / term "+" expr / term "-" expr / term "*" expr / term "/" expr / term "%" expr
+  end
+  
+  rule term
+    label / number / "(" expression ")"
+  end
+  
+  rule number
+    whole_number / signed_integer
+  end
+  
+  rule signed_integer
+    "+" whole_number / "-" whole_number
+  end
+  
+  rule whole_number
+    numeral+
+  end
+  
+  rule alpha
+    [A-Za-z_]
+  end
+  
+  rule numeral
+    [0-9]
+  end
+  
+end
