@@ -6,11 +6,12 @@
 
 require 'polyglot'
 require 'treetop'
-# require File.expand_path(File.dirname(__FILE__) + '/redcode')
+require File.expand_path(File.dirname(__FILE__) + '/redcode')
 
-Treetop.load 'redcode'
+# Treetop.load 'redcode.treetop'
 
 class Instruction < Treetop::Runtime::SyntaxNode
+  attr_reader :address
   attr_accessor :label
   attr_accessor :opcode
   attr_accessor :modifier
@@ -22,6 +23,7 @@ end
 
 class Warrior < Treetop::Runtime::SyntaxNode
   attr_reader :instructions
+  attr_reader :labels
   
   def initialize(text)
     @instructions = list
@@ -35,20 +37,23 @@ end
 class Corewars
   # Simulation variables
   attr_reader :core
-  @config = {
-    :core_size         => 8192,
-    :cycles_before_tie => 100_000,
-    :fill              => :dat,
-    :size_limit        => 256,
-    :thread_limit      => 64,
-    :min_separation    => 512,
-    :read_limit        => -1,
-    :separation        => 512,
-    :write_limit       => -1
-  }
+  attr_reader :config
   
-  def initialize(options)
-    @config = options.merge(@config)
+  def initialize(options = {})
+    @config = {
+      :core_size         => 8192,
+      :cycles_before_tie => 100_000,
+      :fill              => :dat,
+      :size_limit        => 256,
+      :thread_limit      => 64,
+      :min_separation    => 512,
+      :read_limit        => -1,
+      :separation        => 512,
+      :write_limit       => -1
+    }.merge options
+    @process_queue = []     # An array of program counters
+
+    @core = [nil] * @config[:core_size]
   end
   
   def register_warrior ; end

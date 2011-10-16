@@ -19,7 +19,7 @@ grammar Redcode
   rule instruction
     label_list? operation mode field comment <Instruction>
     /
-    label_list? operation mode expr "," mode expr comment <Instruction>
+    label_list? operation mode? expr "," mode? expr comment <Instruction>
   end
   
   rule label_list
@@ -45,7 +45,7 @@ grammar Redcode
   end
   
   rule mode
-    "#" / "$" / "@" / "<" / ">" / ''
+    "#" / "$" / "@" / "<" / ">"
   end
   
   rule expr
