@@ -1,7 +1,7 @@
 
 grammar Redcode
   rule assembly_file
-    list
+    list <Warrior>
   end
 
   rule list
@@ -13,7 +13,7 @@ grammar Redcode
   end
   
   rule comment
-    ";" .* $ / $
+    ";" .* eol / eol
   end
   
   rule instruction
@@ -23,7 +23,7 @@ grammar Redcode
   end
   
   rule label_list
-    label / label label_list / label "\n" label_list
+    label / label label_list / label eol label_list
   end
   
   rule label
@@ -31,17 +31,17 @@ grammar Redcode
   end
   
   rule operation
-    opcode / opcode.modifier
+    opcode / opcode "." modifier
   end
   
   rule opcode
-    "DAT" / "MOV" / "ADD" / "SUB" / "MUL" / "DIV" / "MOD" /
-    "JMP" / "JMZ" / "JMN" / "DJN" / "CMP" / "SLT" / "SPL" /
-    "ORG" / "EQU" / "END"
+    "dat" / "mov" / "add" / "sub" / "mul" / "div" / "mod" /
+    "jmp" / "jmz" / "jmn" / "djn" / "cmp" / "slt" / "spl" /
+    "org" / "equ" / "end"
   end
   
   rule modifier
-    "A" / "B" / "AB" / "BA" / "F" / "X" / "I"
+    "a" / "b" / "ab" / "ba" / "f" / "x" / "i"
   end
   
   rule mode
@@ -74,6 +74,10 @@ grammar Redcode
   
   rule numeral
     [0-9]
+  end
+  
+  rule eol
+    [\r\n|\n\r|\n|\r]
   end
   
 end
