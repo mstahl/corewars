@@ -6,6 +6,16 @@
 
 require 'redcode'   # Will be preprocessed by Polyglot with Treetop
 
+class Instruction < Treetop::Runtime::SyntaxNode
+  attr_accessor :label
+  attr_accessor :opcode
+  attr_accessor :modifier
+  attr_accessor :a_operand
+  attr_accessor :a_mode
+  attr_accessor :b_operand
+  attr_accessor :b_mode
+end
+
 class Corewars
   # Simulation variables
   attr_reader :core_size

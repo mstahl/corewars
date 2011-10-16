@@ -16,10 +16,10 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "corewars"
   gem.homepage = "http://github.com/mstahl/corewars"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "max@dangerouscuteness.com"
+  gem.license = "GPL2"
+  gem.summary = %Q{Corewars simulator written in Ruby}
+  gem.description = %Q{A Corewars simulator with web services for evolving corewarriors.}
+  gem.email = "max@villainousindustri.es"
   gem.authors = ["max thom stahl"]
   # dependencies defined in Gemfile
 end
@@ -41,7 +41,7 @@ Cucumber::Rake::Task.new(:features)
 
 task :default => :spec
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 

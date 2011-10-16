@@ -17,13 +17,13 @@ grammar Redcode
   end
   
   rule instruction
-    label_list? operation mode field comment 
+    label_list? operation mode field comment <Instruction>
     /
-    label_list? operation mode expr "," mode expr comment
+    label_list? operation mode expr "," mode expr comment <Instruction>
   end
   
   rule label_list
-    label / label label_list / label newline label_list
+    label / label label_list / label "\n" label_list
   end
   
   rule label
