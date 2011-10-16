@@ -1,15 +1,36 @@
 
 grammar Redcode
   rule assembly_file
-    list <Warrior>
+    list {
+      def value
+        list.value
+      end
+    }
   end
 
   rule list
-    line / line list
+    line {
+      def value
+        line.value
+      end
+    }
+    / line list {
+      def value
+        line.value + list.value
+      end
+    }
   end
   
   rule line
-    comment / instruction
+    (comment / instruction) {
+      def value
+        if comment then
+          []
+        else
+          [instruction.value]
+        end
+      end
+    }
   end
   
   rule comment
@@ -17,13 +38,51 @@ grammar Redcode
   end
   
   rule instruction
-    label_list? operation mode field comment <Instruction>
-    /
-    label_list? operation mode? expr "," mode? expr comment <Instruction>
+    label_list? operation mode? field comment {
+      def value
+        val = {}
+        if label_list then
+          val[:labels] = label_list.value
+        end
+        val[:operation] = operation.value
+        if mode then
+          val[:a_mode] = mode.value
+        end
+        val[:a_operand] = field.value
+        val
+      end
+    }
+    / label_list? operation a_mode:mode? a_expr:expr "," b_mode:mode? b_expr:expr comment {
+      def value
+        val = {}
+        if label_list then
+          val[:labels] = label_list.value
+        end
+        val[:operation] = operation.value
+        if a_mode then
+          val[:a_mode] = a_mode.value
+        end
+        val[:a_operand] = a_expr.value
+        if b_mode then
+          val[:b_mode] = b_mode.value
+        end
+        val[:b_operand] = b_expr.value
+        val
+      end
+    }
   end
   
   rule label_list
-    label / label label_list / label eol label_list
+    label {
+      def value
+        [self.to_s]
+      end
+    }
+    / (label label_list / label eol label_list) {
+      def value
+        label.value + label_list.value
+      end
+    }
   end
   
   rule label
@@ -31,7 +90,19 @@ grammar Redcode
   end
   
   rule operation
-    opcode / opcode "." modifier
+    opcode {
+      def value
+        {:opcode => opcode.text_value}
+      end
+    }
+    / opcode "." modifier {
+      def value
+        {
+          :opcode => opcode.text_value,
+          :modifier => modifier.text_value
+        }
+      end
+    }
   end
   
   rule opcode
@@ -49,31 +120,82 @@ grammar Redcode
   end
   
   rule expr
-    term / term "+" expr / term "-" expr / term "*" expr / term "/" expr / term "%" expr
+    term {
+      def value
+        term.value
+      end
+    }
+    / term "+" expr {
+      def value
+        {
+          :a => term.value,
+          :op => "+",
+          :b => expr.value
+        }
+      end
+    }
+    / term "-" expr {
+      def value
+        {
+          :a => term.value,
+          :op => "-",
+          :b => expr.value
+        }
+      end
+    }
+    / term "*" expr {
+      def value
+        {
+          :a => term.value,
+          :op => "*",
+          :b => expr.value
+        }
+      end
+    }
+    / term "/" expr {
+      def value
+        {
+          :a => term.value,
+          :op => "/",
+          :b => expr.value
+        }
+      end
+    }
+    / term "%" expr {
+      def value
+        {
+          :a => term.value,
+          :op => "%",
+          :b => expr.value
+        }
+      end
+    }
   end
   
   rule term
-    label / number / "(" expression ")"
+    label {
+      def value
+        label.to_s.to_sym
+      end
+    }
+    / number {
+      def value
+        number.value
+      end
+    }
+    / "(" expression ")" {
+      def value
+        expression.value
+      end
+    }
   end
   
   rule number
-    whole_number / signed_integer
-  end
-  
-  rule signed_integer
-    "+" whole_number / "-" whole_number
-  end
-  
-  rule whole_number
-    numeral+
-  end
-  
-  rule alpha
-    [A-Za-z_]
-  end
-  
-  rule numeral
-    [0-9]
+    ("+" / "-")? [0-9]+ {
+      def value
+        self.to_s.to_i
+      end
+    }
   end
   
   rule eol

@@ -1,15 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 # Imp from http://users.obs.carnegiescience.edu/birk/COREWAR/88/HILL/imp.red
+# ;redcode
+# ;name Imp
+# ;author A.K. Dewdney
+# ;assert 1
+# 
+# imp     mov imp, imp + 1
+# 
+#         end imp
 @@imp = <<__END_IMP__
-;redcode
-;name Imp
-;author A.K. Dewdney
-;assert 1
-
-imp     mov imp, imp + 1
-
-        end imp
+imp mov imp, imp + 1
+    end imp
 __END_IMP__
 
 @@dwarf = <<__END_DWARF__
@@ -61,10 +63,15 @@ describe "Corewars" do
     end
   end
   
-  # it 'can parse the imp program' do
-  #   pending "Not finished with this one yet."
-  #   imp = Corewars.parse @@imp
-  #   imp.instructions[0].opcode.should == 'mov'      # Opcodes are strings
-  #   imp.instructions[0].a_operand.should == :imp    # Symbols are labels in the redcode
-  # end
+  it 'can parse the imp program' do
+    imp = Corewars.parse @@imp
+    imp.should_not be_nil
+
+    puts "{"
+    pp imp
+    puts "}"
+    
+    # imp.instructions[0].opcode.should == 'mov'      # Opcodes are strings
+    # imp.instructions[0].a_operand.should == :imp    # Symbols are labels in the redcode
+  end
 end
