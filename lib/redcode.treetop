@@ -34,11 +34,11 @@ grammar Redcode
   end
   
   rule comment
-    ";" .* eol / eol
+    ";" (![\r\n])* eol / eol
   end
   
   rule instruction
-    label_list? operation mode? field comment {
+    label_list? ' '+ operation ' '* mode? ' '* field ' '* comment {
       def value
         val = {}
         if label_list then
@@ -52,7 +52,7 @@ grammar Redcode
         val
       end
     }
-    / label_list? operation a_mode:mode? a_expr:expr "," b_mode:mode? b_expr:expr comment {
+    / label_list? ' '* operation ' '* a_mode:mode? ' '* a_expr:expr ' '* "," ' '* b_mode:mode? ' '* b_expr:expr ' '* comment {
       def value
         val = {}
         if label_list then
