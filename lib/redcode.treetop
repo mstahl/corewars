@@ -199,7 +199,7 @@ grammar Redcode
   end
   
   rule eol
-    [\r\n|\n\r|\n|\r]
+    "\r\n" / "\n\r" / "\n" / "\r"
   end
   
 end
