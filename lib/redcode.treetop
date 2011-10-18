@@ -1,20 +1,8 @@
 
 grammar Redcode
-  rule s_
-    whitespace*
-  end
-  
-  rule S_
-    space+
-  end
-
-  rule space
-    [ \t\r\n]
-  end
-
   rule instruction
     # (label_list ' ')? operation ' ' (mode ' ')? expr ' '* {
-    operation S_ operand s_ {
+    s_ operation S_ operand s_ {
       def value
         {
           :operation => operation.value,
@@ -23,7 +11,7 @@ grammar Redcode
       end
     }
     /
-    operation S_ a:operand s_ "," s_ b:operand s_ {
+    s_ operation S_ a:operand s_ "," s_ b:operand s_ {
       def value
         {
           :operation => operation.value,
@@ -35,18 +23,24 @@ grammar Redcode
   end
   
   rule operand
-    mode? s_ expr {
+    primary
+    /
+    mode primary {
       def value
         {
           :mode => mode.text_value,
-          :operand => expr.value
+          :operand => primary.value
         }
       end
     }
   end
   
   rule label
-    [a-zA-Z] [a-zA-Z0-9]*
+    [a-zA-Z] [a-zA-Z0-9_]* {
+      def value
+        self.text_value.to_sym
+      end
+    }
   end
   
   rule operation
@@ -59,17 +53,15 @@ grammar Redcode
     opcode "." modifier {
       def value
         {
-          :opcode => opcode.text_value,
-          :modifier => modifier.text_value
+          :opcode => opcode.text_value.to_sym,
+          :modifier => modifier.text_value.to_sym
         }
       end
     }
   end
   
   rule opcode
-    "dat" / "mov" / "add" / "sub" / "mul" / "div" / "mod" /
-    "jmp" / "jmz" / "jmn" / "djn" / "cmp" / "slt" / "spl" /
-    "org" / "equ" / "end"
+    "dat" / "mov" / "add" / "sub" / "mul" / "div" / "mod" / "jmp" / "jmz" / "jmn" / "djn" / "cmp" / "slt" / "spl" / "org" / "equ" / "end"
   end
   
   rule modifier
@@ -81,20 +73,37 @@ grammar Redcode
   end
   
   rule primary
-    label {
-      def value
-        label.to_s.to_sym
-      end
-    }
+    label
     /
     number
   end
   
   rule number
-    ("+" / "-")? [0-9]+ {
+    # sign:("+" / "-") n:[0-9]+ {
+    #   def value
+    #     (if sign.text_value == "+" then 1 else -1 end) * n.text_value.to_i
+    #   end
+    #   
+    # }
+    # /
+    [0-9]+ {
       def value
-        self.to_s.to_i
+        self.text_value.to_i
       end
     }
   end
+  
+  rule s_
+    space*
+  end
+  
+  rule S_
+    space+
+  end
+
+  rule space
+    [ \t\r\n]
+  end
 end
+
+
