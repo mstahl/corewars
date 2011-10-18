@@ -42,14 +42,42 @@ class Warrior < Treetop::Runtime::SyntaxNode
   attr_reader :instructions
   attr_reader :labels
   
-  def initialize(instruction_list)
-    @instructions = instruction_list
-    @labels = []
-  end
+  attr_reader :metadata
   
-  
-  def value
-    Warrior.new list.value
+  def initialize(text)
+    @instructions = []
+    @labels = {}
+    @metadata = {}
+    
+    text.lines.each_with_index do |line, line_no|
+      # Compress whitespace
+      line.gsub! /\s+/, ' '
+      # Strip out the comments from the line
+      line.gsub! /;.*/, ''
+      line.strip!
+      # Attempt to parse
+      unless line.blank?
+        instruction = Corewars.parse line
+        
+        if instruction then
+          @instructions << instruction.value
+        else
+          throw "Parse error on line #{line_no + 1}: #{line}"
+        end
+      end
+    end
+    
+    # Should do something with labels here....
+    @instructions.each_with_index do |instruction, address|
+      if instruction[:labels] then
+        instruction[:labels].each do |l|
+          @labels[l.to_sym] = address   # Label addresses are stored here relative to start of program
+        end
+      end
+    end
+    
+    # Final pass for metadata here. Should only continue until it encounters a
+    # line not beginning with ";", as a (premature) optimization.
   end
 end
 
