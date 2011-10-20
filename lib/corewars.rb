@@ -50,6 +50,11 @@ class Warrior < Treetop::Runtime::SyntaxNode
     @metadata = {}
     
     text.lines.each_with_index do |line, line_no|
+      # Check for metadata
+      if line =~ /^;@(\w+)\s+(.+)/ then
+        @metadata[$1.to_sym] ||= []
+        @metadata[$1.to_sym] << $2
+      end
       # Compress whitespace
       line.gsub! /\s+/, ' '
       # Strip out the comments from the line
@@ -62,7 +67,7 @@ class Warrior < Treetop::Runtime::SyntaxNode
         if instruction then
           @instructions << instruction.value
         else
-          throw "Parse error on line #{line_no + 1}: #{line}"
+          throw "Parse error on line #{line_no + 1}: '#{line}'"
         end
       end
     end
@@ -76,8 +81,17 @@ class Warrior < Treetop::Runtime::SyntaxNode
       end
     end
     
-    # Final pass for metadata here. Should only continue until it encounters a
-    # line not beginning with ";", as a (premature) optimization.
+    # The metadata are stored as an array of strings right now. They should
+    # be handled here to be human-readable.
+    if @metadata[:author] then
+      @metadata[:author] = @metadata[:author].join(',')
+    end
+    if @metadata[:strategy] then
+      @metadata[:strategy] = @metadata[:strategy].join(' ')
+    end
+    if @metadata[:name] then
+      @metadata[:name] = @metadata[:name][0]
+    end
   end
 end
 
