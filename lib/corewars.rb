@@ -75,9 +75,7 @@ class Warrior < Treetop::Runtime::SyntaxNode
     # Should do something with labels here....
     @instructions.each_with_index do |instruction, address|
       if instruction[:labels] then
-        instruction[:labels].each do |l|
-          @labels[l.to_sym] = address   # Label addresses are stored here relative to start of program
-        end
+        @labels[instruction[:labels].to_sym] = address   # Label addresses are stored here relative to start of program
       end
     end
     

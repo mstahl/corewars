@@ -1,22 +1,24 @@
 
 grammar Redcode
   rule instruction
-    operation S_ a:operand s_ "," s_ b:operand {
+    lbl:( label s_ ":" )? s_ operation S_ a:operand s_ "," s_ b:operand {
       def value
         {
           :operation => operation.value,
           :a         => a.value,
-          :b         => b.value
+          :b         => b.value,
+          :labels    => if lbl.text_value.blank? then nil else lbl.text_value.gsub(/\s*:/, '').to_sym end
         }
       end
     }
     /
-    operation S_ operand {
+    lbl:( label s_ ":" )? s_ operation S_ operand {
       def value
         {
           :operation => operation.value,
           :a         => operand.value,
-          :b         => nil
+          :b         => nil,
+          :labels    => if lbl.text_value.blank? then nil else lbl.text_value.gsub(/\s*:/, '').to_sym end
         }
       end
     }

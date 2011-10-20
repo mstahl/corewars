@@ -40,6 +40,13 @@ __END_COMMENTARY__
       warrior.instructions.first[:b][:mode].should == '@'
     end
     
+    it 'collects labels attached to instructions' do
+      warrior = Warrior.new "org imp\nimp: mov imp, imp2\nimp2: dat 0,0"
+      warrior.should_not be_nil
+      warrior.labels[:imp].should == 1
+      warrior.labels[:imp2].should == 2
+    end
+    
     # it 'can parse instructions with a modified opcode' do
     #   program = "div.ab 9, 3"
     #   warrior = Warrior.new program
@@ -61,10 +68,10 @@ __END_COMMENTARY__
 ;@strategy reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
 ;@strategy pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
 ;@strategy culpa qui officia deserunt mollit anim id est laborum.
-org 1
-mov 0, 1
-dat #0, #0
-end sheep_terrorizer
+    org foo
+foo:mov 0, 1
+    dat #0, #0
+    end sheep_terrorizer
 __end_of_program__
       @warrior = Warrior.new @program
     end
