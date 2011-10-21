@@ -1,4 +1,5 @@
 
+Dir["#{File.dirname(__FILE__)}/**/*.rb"].each {|f| require f}
 
 class Instruction < Treetop::Runtime::SyntaxNode
   attr_accessor :address

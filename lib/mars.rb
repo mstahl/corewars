@@ -1,6 +1,7 @@
 
+Dir["#{File.dirname(__FILE__)}/**/*.rb"].each {|f| require f}
 
-class Corewars
+class Mars
   # Simulation variables
   attr_reader :core
   attr_reader :config

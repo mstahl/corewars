@@ -1,4 +1,9 @@
 
+require 'polyglot'
+require 'treetop'
+
+Dir["#{File.dirname(__FILE__)}/**/*.rb"].each {|f| require f}
+
 class Warrior < Treetop::Runtime::SyntaxNode
   attr_reader :instructions
   attr_reader :labels
@@ -15,6 +20,7 @@ class Warrior < Treetop::Runtime::SyntaxNode
       if line =~ /^;@(\w+)\s+(.+)/ then
         @metadata[$1.to_sym] ||= []
         @metadata[$1.to_sym] << $2
+        next
       end
       # Compress whitespace
       line.gsub! /\s+/, ' '
