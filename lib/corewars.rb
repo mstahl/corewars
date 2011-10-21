@@ -7,7 +7,9 @@
 require 'polyglot'
 require 'treetop'
 
-Dir["#{File.dirname(__FILE__)}/lib/**/*.rb"].each {|f| require f}
+require 'redcode'
+
+Dir["#{File.dirname(__FILE__)}/../lib/**/*.rb"].each {|f| require f}
 
 class Instruction < Treetop::Runtime::SyntaxNode
   attr_accessor :address
@@ -22,14 +24,6 @@ class Instruction < Treetop::Runtime::SyntaxNode
   attr_accessor :b_mode
   
   def initialize(text)
-    parser = RedcodeParser.new
-    result = parser.parse text
-    unless result
-      puts parser.failure_reason
-      puts parser.failure_line
-      puts parser.failure_column
-    end
-    result
   end
   
   def value
@@ -75,7 +69,7 @@ class Warrior < Treetop::Runtime::SyntaxNode
       line.strip!
       # Attempt to parse
       unless line.blank?
-        instruction = Corewars.parse line
+        instruction = Mars.parse line
         
         if instruction then
           @instructions << instruction.value
@@ -139,5 +133,16 @@ class Mars
   def step
     # Each step of the simulation, the next program counter in the process queue
     # must be run. 
+  end
+  
+  def self.parse(text)
+    parser = RedcodeParser.new
+    result = parser.parse text
+    unless result
+      puts parser.failure_reason
+      puts parser.failure_line
+      puts parser.failure_column
+    end
+    result
   end
 end
