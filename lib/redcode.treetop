@@ -1,60 +1,19 @@
 
 grammar Redcode
   rule instruction
-    lbl:( label s_ ":" )? s_ operation S_ a:operand s_ "," s_ b:operand {
-      def value
-        {
-          :operation => operation.value,
-          :a         => a.value,
-          :b         => b.value,
-          :labels    => if lbl.text_value.blank? then nil else lbl.text_value.gsub(/\s*:/, '').to_sym end
-        }
-      end
-    }
+    lbl:( label s_ ":" )? s_ operation S_ a:operand s_ "," s_ b:operand <Instruction>
     /
-    lbl:( label s_ ":" )? s_ operation S_ operand {
-      def value
-        {
-          :operation => operation.value,
-          :a         => operand.value,
-          :b         => nil,
-          :labels    => if lbl.text_value.blank? then nil else lbl.text_value.gsub(/\s*:/, '').to_sym end
-        }
-      end
-    }
+    lbl:( label s_ ":" )? s_ operation S_ operand <Instruction>
   end
   
   rule operand
     primary
     /
-    mode primary {
-      def value
-        {
-          :mode => mode.text_value.to_s,
-          :value => primary.text_value.to_i
-        }
-      end
-    }
-  end
-  
-  
-  rule label
-    [a-zA-Z] [a-zA-Z0-9_]* {
-      def value
-        self.text_value.to_sym
-      end
-    }
+    mode primary
   end
   
   rule operation
-    opcode m:( "." modifier )? {
-      def value
-        {
-          :opcode => self.text_value.to_sym,
-          :modifier => m.text_value.to_sym
-        }
-      end
-    }
+    opcode m:( "." modifier )?
   end
   
   rule opcode
@@ -73,6 +32,14 @@ grammar Redcode
     label
     /
     number
+  end
+  
+  rule label
+    [a-zA-Z] [a-zA-Z0-9_]* {
+      def value
+        self.text_value
+      end
+    }
   end
   
   rule number

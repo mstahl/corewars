@@ -12,34 +12,41 @@ require 'redcode'
 Dir["#{File.dirname(__FILE__)}/../lib/**/*.rb"].each {|f| require f}
 
 class Instruction < Treetop::Runtime::SyntaxNode
-  attr_accessor :address
-  attr_accessor :labels
-  
-  attr_accessor :label
+  attr_reader :label
   attr_accessor :opcode
-  attr_accessor :modifier
-  attr_accessor :a_operand
-  attr_accessor :a_mode
-  attr_accessor :b_operand
-  attr_accessor :b_mode
-  
-  def initialize(text)
-  end
+  attr_accessor :a
+  attr_accessor :b
   
   def value
-    # Handle labels here. If this line has a label, add it to @labels
-    if label_list then
-      labels += label_list.value
+    if lbl then
+      @label = lbl.text_value.gsub(/\s+/, '_').gsub(/[^\w_]/, '').to_sym
     end
     
-    if field then
-      # First form: label_list? operation mode? field comment
-      opcode = operation.value
-      a_mode = mode.value if mode
-      a_operand = field.value
-    else
-      # Second form: label_list? operation a_operand:(mode? expr) "," b_operand:(mode? expr) comment
-      
+    @opcode = operation.opcode
+    class << @opcode
+      def modifier
+        unless operation.m.blank?
+          operation.m.modifier.text_value.to_sym
+        end
+      end
+    end
+    
+    @a = a.primary
+    class << @a
+      def mode
+        unless a.mode.blank?
+          a.mode.text_value.to_sym
+        end
+      end
+    end
+    
+    @b = b.primary
+    class << @b
+      def mode
+        unless b.mode.blank?
+          b.mode.text_value.to_sym
+        end
+      end
     end
   end
 end
@@ -139,9 +146,9 @@ class Mars
     parser = RedcodeParser.new
     result = parser.parse text
     unless result
-      puts parser.failure_reason
-      puts parser.failure_line
-      puts parser.failure_column
+      puts "#{parser.failure_reason}:"
+      puts "'#{text}'"
+      puts " " + (" " * parser.failure_column.to_i) + "^"
     end
     result
   end
