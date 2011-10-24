@@ -3,17 +3,31 @@ grammar Redcode
   rule instruction
     lbl:( label s_ ":" )? s_ operation S_ a:operand s_ "," s_ b:operand <Instruction>
     /
-    lbl:( label s_ ":" )? s_ operation S_ operand <Instruction>
+    lbl:( label s_ ":" )? s_ operation S_ a:operand <Instruction>
   end
   
   rule operand
-    primary
+    primary {
+      def value
+        {
+          :expression => primary.value,
+          :mode       => nil
+        }
+      end
+    }
     /
-    mode primary
+    mode primary {
+      def value
+        {
+          :expression => primary.value,
+          :mode       => mode.text_value
+        }
+      end
+    }
   end
   
   rule operation
-    opcode m:( "." modifier )?
+    opcode m:( "." modifier )? <Operation>
   end
   
   rule opcode

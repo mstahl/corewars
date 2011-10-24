@@ -7,51 +7,60 @@
 require 'polyglot'
 require 'treetop'
 
-require 'redcode'
+# require 'redcode'
 
 Dir["#{File.dirname(__FILE__)}/../lib/**/*.rb"].each {|f| require f}
 
 class Instruction < Treetop::Runtime::SyntaxNode
-  attr_reader :label
-  attr_accessor :opcode
-  attr_accessor :a
-  attr_accessor :b
-  
   def value
-    if lbl then
-      @label = lbl.text_value.gsub(/\s+/, '_').gsub(/[^\w_]/, '').to_sym
-    end
+    hash = {
+      :opcode => operation.value[:opcode],
+      :label  => lbl ? lbl.text_value.gsub(/\s+/, '_').gsub(/[^\w_]/, '').to_sym : nil
+    }
+    # a ||= nil
+    # b ||= nil
     
-    @opcode = operation.opcode
-    class << @opcode
-      def modifier
-        unless operation.m.blank?
-          operation.m.modifier.text_value.to_sym
-        end
+    unless a.nil?
+      if a.value.class == Hash then
+        hash[:a_mode] = a.value[:mode]
+        hash[:a] = a.value[:expression]
+      else
+        hash[:a] = a.value
       end
     end
     
-    @a = a.primary
-    class << @a
-      def mode
-        unless a.mode.blank?
-          a.mode.text_value.to_sym
-        end
+    unless b.nil?
+      if b.value.class == Hash then
+        hash[:b_mode] = b.value[:mode]
+        hash[:b] = b.value[:expression]
+      else
+        hash[:b] = b.value
       end
     end
     
-    @b = b.primary
-    class << @b
-      def mode
-        unless b.mode.blank?
-          b.mode.text_value.to_sym
-        end
-      end
-    end
+    hash
   end
 end
 
-class Warrior < Treetop::Runtime::SyntaxNode
+class Operation < Treetop::Runtime::SyntaxNode
+  def value
+    {
+      :opcode   => opcode.text_value.to_sym,
+      :modifier => m.text_value.blank? ? nil : modifier.text_value.to_sym
+    }
+  end
+end
+
+class Operand < Treetop::Runtime::SyntaxNode
+  def value
+    {
+      :expression => primary.value,
+      :mode       => mode ? mode.text_value : nil
+    }
+  end
+end
+
+class Warrior
   attr_reader :instructions
   attr_reader :labels
   
@@ -76,7 +85,7 @@ class Warrior < Treetop::Runtime::SyntaxNode
       line.strip!
       # Attempt to parse
       unless line.blank?
-        instruction = Mars.parse line
+        instruction = Mars.parse(line)
         
         if instruction then
           @instructions << instruction.value
@@ -87,11 +96,11 @@ class Warrior < Treetop::Runtime::SyntaxNode
     end
     
     # Should do something with labels here....
-    @instructions.each_with_index do |instruction, address|
-      if instruction[:labels] then
-        @labels[instruction[:labels].to_sym] = address   # Label addresses are stored here relative to start of program
-      end
-    end
+    # @instructions.each_with_index do |instruction, address|
+    #   if instruction[:labels] then
+    #     @labels[instruction[:labels].to_sym] = address   # Label addresses are stored here relative to start of program
+    #   end
+    # end
     
     # The metadata are stored as an array of strings right now. They should
     # be handled here to be human-readable.
