@@ -7,9 +7,7 @@
 require 'polyglot'
 require 'treetop'
 
-# require 'redcode'
-
-Dir["#{File.dirname(__FILE__)}/../lib/**/*.rb"].each {|f| require f}
+require 'corewars/redcode'
 
 class Instruction < Treetop::Runtime::SyntaxNode
   def value
@@ -20,7 +18,7 @@ class Instruction < Treetop::Runtime::SyntaxNode
     # a ||= nil
     # b ||= nil
     
-    unless a.nil?
+    if defined? a
       if a.value.class == Hash then
         hash[:a_mode] = a.value[:mode]
         hash[:a] = a.value[:expression]
@@ -29,7 +27,7 @@ class Instruction < Treetop::Runtime::SyntaxNode
       end
     end
     
-    unless b.nil?
+    if defined? b
       if b.value.class == Hash then
         hash[:b_mode] = b.value[:mode]
         hash[:b] = b.value[:expression]
