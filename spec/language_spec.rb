@@ -93,4 +93,11 @@ __end_of_program__
       @warrior.metadata[:strategy].should =~ /mollit anim id est laborum.$/
     end
   end
+  
+  context 'parsing errors and handling them' do
+    it 'should throw an exception for a parse error' do
+      (->{Warrior.new("Ce n'est pas un guerrier")}).should raise_error
+    end
+  end
+  
 end

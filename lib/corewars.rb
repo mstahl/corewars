@@ -85,11 +85,7 @@ class Warrior
       unless line.blank?
         instruction = Mars.parse(line)
         
-        if instruction then
-          @instructions << instruction.value
-        else
-          throw "Parse error on line #{line_no + 1}: '#{line}'"
-        end
+        @instructions << instruction.value
       end
     end
     
@@ -133,7 +129,7 @@ class Mars
     }.merge options
     @process_queue = []     # An array of program counters
 
-    @core = [nil] * @config[:core_size]
+    @core = [Mars.parse("dat #0, #0")] * @config[:core_size]
     
     @warriors = {}    # Hash that will hold, for each warrior, various stats about it
   end
@@ -153,9 +149,10 @@ class Mars
     parser = RedcodeParser.new
     result = parser.parse text
     unless result
-      puts "#{parser.failure_reason}:"
-      puts "'#{text}'"
-      puts " " + (" " * parser.failure_column.to_i) + "^"
+      err =  "#{parser.failure_reason}:\n"
+      err << "'#{text}'\n"
+      err << " " + (" " * parser.failure_column.to_i) + "^\n"
+      throw err
     end
     result
   end

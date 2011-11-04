@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Corewars" do
   context 'configuration' do
-    it 'should be configurable' do
+    it 'should have a default configuration' do
       cw = Mars.new
       cw.config[:core_size        ].should == 8192
       cw.config[:cycles_before_tie].should == 100_000
@@ -13,7 +13,9 @@ describe "Corewars" do
       cw.config[:read_limit       ].should == -1
       cw.config[:separation       ].should == 512
       cw.config[:write_limit      ].should == -1
-      
+    end
+    
+    it 'should be configurable' do
       cw = Mars.new :core_size         => 1,
                     :cycles_before_tie => 2,
                     :fill              => :dat,
