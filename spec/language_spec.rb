@@ -3,19 +3,19 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe "Redcode Language" do
   context "Parsing" do
     
-#     it 'ignores comments' do
-#       commentary_text = <<__END_COMMENTARY__
-# ; This is a comment
-# ; So is this
-# ;and this
-# org foo
-# mov 0,1   ; Comments are allowed after code, too!
-# __END_COMMENTARY__
-#       
-#       commentary = Warrior.new commentary_text
-#       commentary.should_not be_nil
-#       commentary.instructions.length.should == 2
-#     end
+    it 'ignores comments' do
+      commentary_text = <<__END_COMMENTARY__
+; This is a comment
+; So is this
+;and this
+org foo
+mov 0,1   ; Comments are allowed after code, too!
+__END_COMMENTARY__
+      
+      commentary = Warrior.new commentary_text
+      commentary.should_not be_nil
+      commentary.instructions.length.should == 2
+    end
 
     it 'can parse an instruction with single operand' do
       warrior = Warrior.new "org 3"
@@ -25,35 +25,37 @@ describe "Redcode Language" do
       warrior.instructions.first[:a_mode].should be_nil
     end
     
-    # it 'can parse an instruction with two operands' do
-    #   warrior = Warrior.new "mov 0,1"
-    #   warrior.should_not be_nil
-    #   warrior.instructions.first[:opcode].should == :mov
-    #   warrior.instructions.first[:a].should == 0
-    #   warrior.instructions.first[:b].should == 1
-    # end
+    it 'can parse an instruction with two operands' do
+      warrior = Warrior.new "mov 0,1"
+      warrior.should_not be_nil
+      warrior.instructions.first[:opcode].should == :mov
+      warrior.instructions.first[:a].should == 0
+      warrior.instructions.first[:b].should == 1
+    end
     
-    # it 'can parse instructions with modes on operands' do
-    #   warrior = Warrior.new "mul $0, @foo"
-    #   warrior.should_not be_nil
-    #   warrior.instructions.first[:operation][:opcode].should == :mul
-    #   warrior.instructions.first[:a][:mode].should == '$'
-    #   warrior.instructions.first[:b][:mode].should == '@'
-    # end
+    it 'can parse instructions with modes on operands' do
+      warrior = Warrior.new "mul $0, @foo"
+      warrior.should_not be_nil
+      warrior.instructions.first[:opcode].should == :mul
+      warrior.instructions.first[:a].should == 0
+      warrior.instructions.first[:a_mode].should == '$'
+      warrior.instructions.first[:b].should == :foo
+      warrior.instructions.first[:b_mode].should == '@'
+    end
     
-    # it 'collects labels attached to instructions' do
-    #   warrior = Warrior.new "org imp\nimp: mov imp, imp2\nimp2: dat 0,0"
-    #   warrior.should_not be_nil
-    #   warrior.labels[:imp].should == 1
-    #   warrior.labels[:imp2].should == 2
-    # end
+    it 'collects labels attached to instructions' do
+      warrior = Warrior.new "org imp\nimp: mov imp, imp2\nimp2: dat 0,0"
+      warrior.should_not be_nil
+      warrior.labels[:imp].should == 1
+      warrior.labels[:imp2].should == 2
+    end
     
-    # it 'can parse instructions with a modified opcode' do
-    #   program = "div.ab 9, 3"
+    # it 'can parse instructions with a modified opcode', :wip => true do
+    #   program = "div.a 9, 3"
     #   warrior = Warrior.new program
     #   warrior.should_not be_nil
-    #   warrior.instructions.first[:operation][:opcode].should == :div
-    #   warrior.instructions.first[:operation][:modifier].should == :ab
+    #   warrior.instructions.first[:opcode].should == :div
+    #   warrior.instructions.first[:modifier].should == :a
     # end
   end
   

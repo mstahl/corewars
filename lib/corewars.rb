@@ -8,15 +8,15 @@ require 'polyglot'
 require 'treetop'
 
 require 'corewars/redcode'
+require 'pp'
 
 class Instruction < Treetop::Runtime::SyntaxNode
   def value
     hash = {
-      :opcode => operation.value[:opcode],
-      :label  => lbl ? lbl.text_value.gsub(/\s+/, '_').gsub(/[^\w_]/, '').to_sym : nil
+      :opcode   => operation.value[:opcode],
+      :modifier => operation.value[:modifier],
+      :label    => lbl ? lbl.text_value.gsub(/\s+/, '_').gsub(/[^\w_]/, '').to_sym : nil
     }
-    # a ||= nil
-    # b ||= nil
     
     if defined? a
       if a.value.class == Hash then
@@ -44,7 +44,7 @@ class Operation < Treetop::Runtime::SyntaxNode
   def value
     {
       :opcode   => opcode.text_value.to_sym,
-      :modifier => m.text_value.blank? ? nil : modifier.text_value.to_sym
+      :modifier => defined? modifier ? nil : modifier.text_value.to_sym
     }
   end
 end
@@ -94,11 +94,11 @@ class Warrior
     end
     
     # Should do something with labels here....
-    # @instructions.each_with_index do |instruction, address|
-    #   if instruction[:labels] then
-    #     @labels[instruction[:labels].to_sym] = address   # Label addresses are stored here relative to start of program
-    #   end
-    # end
+    @instructions.each_with_index do |instruction, address|
+      if instruction[:label] then
+        @labels[instruction[:label].to_sym] = address   # Label addresses are stored here relative to start of program
+      end
+    end
     
     # The metadata are stored as an array of strings right now. They should
     # be handled here to be human-readable.
