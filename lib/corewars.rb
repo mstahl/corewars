@@ -18,22 +18,13 @@ class Instruction < Treetop::Runtime::SyntaxNode
       :label    => lbl ? lbl.text_value.gsub(/\s+/, '_').gsub(/[^\w_]/, '').to_sym : nil
     }
     
-    if defined? a
-      if a.value.class == Hash then
-        hash[:a_mode] = a.value[:mode]
-        hash[:a] = a.value[:expression]
-      else
-        hash[:a] = a.value
-      end
-    end
+    hash[:a_mode] = a.value[:mode]
+    hash[:a] = a.value[:expression]
+    
     
     if defined? b
-      if b.value.class == Hash then
-        hash[:b_mode] = b.value[:mode]
-        hash[:b] = b.value[:expression]
-      else
-        hash[:b] = b.value
-      end
+      hash[:b_mode] = b.value[:mode]
+      hash[:b] = b.value[:expression]
     end
     
     hash
@@ -53,7 +44,7 @@ class Operand < Treetop::Runtime::SyntaxNode
   def value
     {
       :expression => primary.value,
-      :mode       => mode ? mode.text_value : nil
+      :mode       => defined? mode ? mode.text_value : nil
     }
   end
 end
