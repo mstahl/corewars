@@ -174,8 +174,19 @@ class Mars
   def run ; end
   
   def step
-    # Each step of the simulation, the next program counter in the process queue
-    # must be run. 
+    current_instruction = @core[@process_queue.first]
+    pc = @process_queue.shift
+    
+    case current_instruction.value[:opcode]
+    when :mov
+      @core[pc + current_instruction.value[:b]] = @core[pc + current_instruction.value[:a]]
+      pc += 1
+    else
+      raise "I can't understand this instruction: #{current_instruction.text_value}"
+    end
+    
+    # Rotate the process queue
+    @process_queue << pc
   end
   
   # Managing the contents and state of the core ###############################
@@ -213,5 +224,6 @@ class Mars
     end
     result
   end
+  
 end
 
