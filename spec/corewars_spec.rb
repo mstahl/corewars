@@ -38,13 +38,8 @@ describe "Corewars" do
   end
   
   context 'the actual core' do
-    before(:all) do
+    before(:each) do
       @core = Mars.new
-    end
-    
-    it 'should be able to set the value of any memory cell' do
-      @core[0]    = "mov 0, 1"
-      @core[4096] = Mars.parse("add 8, 9")
     end
     
     it 'should not be able to set the value of a memory cell to just anything' do
@@ -52,9 +47,37 @@ describe "Corewars" do
     end
     
     it 'should be able to get the value of any memory cell' do
-      # Default core is filled with "DAT #0, #0" instructions
-      @core[0].value[:opcode].should == :mov
+      @core[0]    = "mov 0, 1"
+      @core[4096] = Mars.parse("add 8, 9")
+      
+      @core[0].value[:opcode].should    == :mov
       @core[4096].value[:opcode].should == :add
     end
+    
+    it 'should be able to place a Warrior onto the core' do
+      @core[0] = Warrior.new %q{
+        add 0, 1
+        sub 2, 3
+        mul 4, 5
+        div 6, 7
+      }
+      @core[0].value[:opcode].should == :add
+      @core[1].value[:opcode].should == :sub
+      @core[2].value[:opcode].should == :mul
+      @core[3].value[:opcode].should == :div
+    end
+    
+    # it 'should be able to register warriors' do
+    #   @core.register(Warrior.new(%w{
+    #     org imp
+    #     imp: mov 0, 1
+    #   }))
+    #   @core.warriors.length.should == 1
+    #   warrior = @core.warriors.first
+    #   warrior.org.should >= 0
+    #   warrior.org.should < 8192
+    #   @core[warrior.org].value[:opcode].should == :org
+    # end
+    
   end
 end
