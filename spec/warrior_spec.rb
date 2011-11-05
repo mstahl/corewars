@@ -62,8 +62,21 @@ describe "Warrior" do
             dat #1, #1
         bar:div 4, 5
       }
+      @core = Mars.new
+      @core[0] = @warrior
+    end
+    
+    it 'should have a start address' do
+      @warrior.org.should == 0
+    end
+    
+    it '\'s labels should point to the right addresses' do
+      @warrior.labels[:foo].should == 0
+      @warrior.labels[:bar].should == 4
     end
     
   end
   
 end
+
+

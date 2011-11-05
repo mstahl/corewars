@@ -1,5 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+require 'pp'
+
 describe "Corewars" do
   context 'configuration' do
     it 'should have a default configuration' do
@@ -67,17 +69,21 @@ describe "Corewars" do
       @core[3].value[:opcode].should == :div
     end
     
-    # it 'should be able to register warriors' do
-    #   @core.register(Warrior.new(%w{
-    #     org imp
-    #     imp: mov 0, 1
-    #   }))
-    #   @core.warriors.length.should == 1
-    #   warrior = @core.warriors.first
-    #   warrior.org.should >= 0
-    #   warrior.org.should < 8192
-    #   @core[warrior.org].value[:opcode].should == :org
-    # end
+    it 'should be able to register warriors' do
+      warrior = Warrior.new %q{
+            add 0, 1
+            sub 2, 3
+            mul 4, 5
+        foo:div 6, 7
+      }
+      @core.register_warrior warrior
+      @core.warriors.count.should == 1
+      warrior.org.should >= 0
+      warrior.org.should < 8192
+      @core[warrior.org].value[:opcode].should == :add
+      @core[warrior.labels[:foo]].value[:opcode].should == :div
+      @core.process_queue.first.should == warrior.org
+    end
     
   end
 end

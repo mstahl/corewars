@@ -123,6 +123,7 @@ class Warrior
     if @metadata[:name] then
       @metadata[:name] = @metadata[:name][0]
     end
+    
   end
   
   def placed_at(address)
@@ -142,6 +143,8 @@ class Mars
   # Simulation variables
   attr_reader :core
   attr_reader :config
+  attr_reader :process_queue
+  attr_reader :warriors
   
   def initialize(options = {})
     @config = {
@@ -163,7 +166,9 @@ class Mars
   end
   
   def register_warrior(warrior)
-    @warriors[warrior.class.to_sym] = warrior
+    @warriors[warrior.class.to_s.to_sym] = warrior
+    self[rand(@core.length)] = warrior
+    @process_queue << warrior.org
   end
   
   def run ; end
