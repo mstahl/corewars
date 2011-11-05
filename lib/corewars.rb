@@ -136,6 +136,24 @@ class Mars
     # must be run. 
   end
   
+  # Managing the contents and state of the core ###############################
+  
+  def [](i)
+    @core[i]
+  end
+  
+  def []=(i, val)
+    if val.is_a? String then
+      @core[i] = Mars.parse(val)
+    elsif val.is_a? Instruction then
+      @core[i] = val
+    else
+      throw "argument must be an Instruction or String"
+    end
+  end
+  
+  # Class methods #############################################################
+  
   def self.parse(text)
     parser = RedcodeParser.new
     result = parser.parse text
@@ -148,3 +166,4 @@ class Mars
     result
   end
 end
+

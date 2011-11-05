@@ -43,6 +43,26 @@ __END_COMMENTARY__
       warrior.instructions.first[:b_mode].should == '@'
     end
     
+    it 'can parse instructions with one mode on one operand' do
+      warrior = Warrior.new "mul 0, @foo"
+      warrior.should_not be_nil
+      warrior.instructions.first[:opcode].should == :mul
+      warrior.instructions.first[:a].should == 0
+      warrior.instructions.first[:a_mode].should == nil
+      warrior.instructions.first[:b].should == :foo
+      warrior.instructions.first[:b_mode].should == '@'
+    end
+    
+    it 'can parse instructions with one mode on the other operand' do
+      warrior = Warrior.new "mul #0, foo"
+      warrior.should_not be_nil
+      warrior.instructions.first[:opcode].should == :mul
+      warrior.instructions.first[:a].should == 0
+      warrior.instructions.first[:a_mode].should == '#'
+      warrior.instructions.first[:b].should == :foo
+      warrior.instructions.first[:b_mode].should == nil
+    end
+    
     it 'collects labels attached to instructions' do
       warrior = Warrior.new "org imp\nimp: mov imp, imp2\nimp2: dat 0,0"
       warrior.should_not be_nil

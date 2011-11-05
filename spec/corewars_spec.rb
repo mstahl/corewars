@@ -37,4 +37,24 @@ describe "Corewars" do
     end
   end
   
+  context 'the actual core' do
+    before(:all) do
+      @core = Mars.new
+    end
+    
+    it 'should be able to set the value of any memory cell' do
+      @core[0]    = "mov 0, 1"
+      @core[4096] = Mars.parse("add 8, 9")
+    end
+    
+    it 'should not be able to set the value of a memory cell to just anything' do
+      (->{ @core[9] = 382975.38299904 }).should raise_error
+    end
+    
+    it 'should be able to get the value of any memory cell' do
+      # Default core is filled with "DAT #0, #0" instructions
+      @core[0].value[:opcode].should == :mov
+      @core[4096].value[:opcode].should == :add
+    end
+  end
 end
