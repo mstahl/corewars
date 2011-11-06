@@ -1,17 +1,26 @@
+body {
+  background-image: url(../images/grid10.png);
+  color: #efefef; }
+
 a, a:link, a:visited, a:active {
   text-decoration: none;
-  color: blue;
+  color: #ccccff;
   font-weight: bold; }
   a:hover, a:link:hover, a:visited:hover, a:active:hover {
+    color: #eeeeee;
     text-decoration: underline; }
 
 header, article, footer {
   width: 900px;
   margin: 20px auto; }
 
+header {
+  margin-top: 30px; }
+
 footer {
   font-size: 9px;
-  color: #666666; }
+  color: #666666;
+  margin-bottom: 70px; }
 
 aside {
   width: 150px;
