@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Corewars for Ruby :: {{ page.title }}</title>
+    <link rel="stylesheet" href="../css/normalize.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+    <link rel="stylesheet" href="../css/corewars.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+    
+  </head>
+  <body>
+    <header>
+      <h1 class="branding">Corewars :: <a href="{{ page.url }}">{{ page.title }}</a></h1>
+    </header>
+    <article id="content">
+      <aside id="posts" class="right">
+        <h2>posts</h2>
+        {% for post in site.posts limit:5 %}
+          <p>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+          </p>
+        {% endfor %}
+      </aside>
+      <!-- Begin content -->
+      {{ content }}
+      <!-- End content -->
+    </article>
+    <footer>
+      &copy; max thom stahl. See License for details.
+    </footer>
+  </body>
+</html>

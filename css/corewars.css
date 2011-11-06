@@ -1,0 +1,28 @@
+a, a:link, a:visited, a:active {
+  text-decoration: none;
+  color: blue;
+  font-weight: bold; }
+  a:hover, a:link:hover, a:visited:hover, a:active:hover {
+    text-decoration: underline; }
+
+header, article, footer {
+  width: 900px;
+  margin: 20px auto; }
+
+footer {
+  font-size: 9px;
+  color: #666666; }
+
+aside {
+  width: 150px;
+  font-size: 10px; }
+  aside.right {
+    float: right;
+    border-left: 1px #cccccc solid;
+    padding-left: 15px;
+    margin-left: 15px; }
+  aside.left {
+    float: left;
+    border-right: 1px #cccccc solid;
+    padding-right: 15px;
+    margin-right: 15px; }

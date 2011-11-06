@@ -1,0 +1,8 @@
+---
+title: New Site
+category: meta
+---
+
+Okay so I made this little site using Jekyll so I have a spot to place the
+documentation for Corewars and any information about it. Not sure how often
+I'll need to update it or whatever, but here it is.
