@@ -8,14 +8,14 @@
   </head>
   <body>
     <header>
-      <h1 class="branding">Corewars :: <a href="{{ page.url }}">{{ page.title }}</a></h1>
+      <h1 class="branding"><a href="/corewars/">Corewars</a> :: <a href="/corewars{{ page.url }}">{{ page.title }}</a></h1>
     </header>
     <article id="content">
       <aside id="posts" class="right">
         <h2>posts</h2>
         {% for post in site.posts limit:5 %}
           <p>
-            <a href="{{ post.url }}">{{ post.title }}</a>
+            <a href="/corewars{{ post.url }}">{{ post.title }}</a>
           </p>
         {% endfor %}
       </aside>
