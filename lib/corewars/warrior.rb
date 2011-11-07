@@ -11,10 +11,13 @@ class Warrior
   
   attr_writer :start_address
   
+  attr_accessor :tasks
+  
   def initialize(text)
     @instructions = []
     @labels = {}
     @metadata = {}
+    @tasks = []
     
     text.lines.each_with_index do |line, line_no|
       # Check for metadata
@@ -31,6 +34,7 @@ class Warrior
       # Attempt to parse
       unless line.blank?
         instruction = Mars.parse(line)
+        instruction.warrior = self
         
         @instructions << instruction
       end
@@ -85,6 +89,8 @@ class Warrior
     @labels.each do |lbl, addr|
       @labels[lbl] = @start_address + addr
     end
+    
+    @tasks << @org
     
   end
   

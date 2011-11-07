@@ -1,5 +1,7 @@
 
 class Instruction < Treetop::Runtime::SyntaxNode
+  attr_accessor :warrior
+  
   def value
     hash = {
       :opcode   => operation.value[:opcode],

@@ -7,6 +7,4 @@ describe "The ADD instruction" do
     @core = Mars.new
   end
   
-  it 'should add two numbers in DAT '
-  
 end

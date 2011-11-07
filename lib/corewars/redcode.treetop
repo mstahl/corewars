@@ -39,7 +39,7 @@ grammar Redcode
   end
   
   rule mode
-    "#" / "$" / "@" / "<" / ">"
+    "#" / "$" / "@" / "<" / ">" / "{" / "}"
   end
   
   rule primary
