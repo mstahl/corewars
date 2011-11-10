@@ -37,15 +37,29 @@ describe "Corewars" do
       cw.config[:separation       ].should == 7
       cw.config[:write_limit      ].should == 8
     end
+    
+    it 'should throw exception on invalid configuration key', :wip => true do
+      (->{ cw = Mars.new :shabbazabba => 8329759.39294 }).should raise_error
+    end
+    
   end
   
   context 'the actual core' do
     before(:each) do
-      @core = Mars.new
+      @core_size = 1_000
+      @core = Mars.new :core_size => @core_size
     end
     
     it 'should not be able to set the value of a memory cell to just anything' do
       (->{ @core[9] = 382975.38299904 }).should raise_error
+    end
+    
+    it 'should wrap around', :wip => true do
+      @core[@core_size + 7] = Mars.parse("dat #13, #17")
+      
+      @core[@core_size * 3 + 7].value[:opcode].should == :dat
+      @core[@core_size * 17 + 7].value[:a].should == 13
+      @core[7].value[:b].should == 17
     end
     
     it 'should be able to get the value of any memory cell' do
@@ -79,10 +93,36 @@ describe "Corewars" do
       @core.register_warrior warrior
       @core.warriors.count.should == 1
       warrior.org.should >= 0
-      warrior.org.should < 8192
-      @core[warrior.org].value[:opcode].should == :add
+      warrior.org.should < @core_size
+      @core[warrior.org + 0].value[:opcode].should == :add
+      @core[warrior.org + 1].value[:opcode].should == :sub
+      @core[warrior.org + 2].value[:opcode].should == :mul
+      @core[warrior.org + 3].value[:opcode].should == :div
       @core[warrior.labels[:foo]].value[:opcode].should == :div
       @core.process_queue.first.should == warrior.org
+    end
+    
+    it 'should be able to register warriors onto specific addresses' do
+      warrior = Warrior.new %q{
+            add 0, 1
+            sub 2, 3
+            mul 4, 5
+        foo:div 6, 7
+      }
+      @core.register_warrior warrior, :at => 0
+      @core.warriors.count.should == 1
+      warrior.org.should == 0
+      @core[0].value[:opcode].should == :add
+      @core[1].value[:opcode].should == :sub
+      @core[2].value[:opcode].should == :mul
+      @core[3].value[:opcode].should == :div
+      @core[warrior.labels[:foo]].value[:opcode].should == :div
+      @core.process_queue.first.should == warrior.org
+    end
+    
+    it 'should wrap memory around for warrior registration' do
+      pending "Need to write this one next"
+      warrior = Warrior.new
     end
     
   end

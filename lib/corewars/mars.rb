@@ -6,6 +6,11 @@ class Mars
   attr_reader :warriors
   
   def initialize(options = {})
+    opts = [:core_size , :cycles_before_tie, :fill , :size_limit , :thread_limit , :min_separation , :read_limit , :separation , :write_limit]
+    unless (options.keys - opts).empty?
+      raise "Invalid configuration keys: #{(options.keys - opts).map(&:to_s).join(', ')}"
+    end
+    
     @config = {
       :core_size         => 8192,
       :cycles_before_tie => 100_000,
@@ -24,9 +29,16 @@ class Mars
     @warriors = []
   end
   
-  def register_warrior(warrior)
+  def register_warrior(warrior, options = {})
+    at = 0
+    if options.has_key?(:at) and options[:at].is_a?(Fixnum)
+      at = options[:at]
+    else
+      at = rand(@core.length)
+    end
+    
     @warriors << warrior
-    self[rand(@core.length)] = warrior
+    self[at] = warrior
     @process_queue << warrior.org
   end
   
@@ -48,7 +60,44 @@ class Mars
     when :jmp
       program_counter = a_pointer
     when :mov
-      
+      # Pending
+      program_counter += 1
+    when :add
+      # Pending
+      program_counter += 1
+    when :sub
+      # Pending
+      program_counter += 1
+    when :mul
+      # Pending
+      program_counter += 1
+    when :div
+      # Pending
+      program_counter += 1
+    when :mod
+      # Pending
+      program_counter += 1
+    when :jmz
+      # Pending
+      program_counter += 1
+    when :jmn
+      # Pending
+      program_counter += 1
+    when :djn
+      # Pending
+      program_counter += 1
+    when :cmp
+      # Pending
+      program_counter += 1
+    when :slt
+      # Pending
+      program_counter += 1
+    when :spl
+      # Pending
+      program_counter += 1
+    # when :org
+    # when :equ
+    # when :end
     else
       raise "I can't understand this instruction: #{instruction_register[:opcode]}"
     end
@@ -70,19 +119,19 @@ class Mars
   # Managing the contents and state of the core ###############################
   
   def [](i)
-    @core[i]
+    @core[i % @config[:core_size]]
   end
   
   def []=(i, val)
     if val.is_a? String then
-      @core[i] = Mars.parse(val)
+      @core[i % @config[:core_size]] = Mars.parse(val)
     elsif val.is_a? Instruction then
-      @core[i] = val
+      @core[i % @config[:core_size]] = val
     elsif val.is_a? Warrior then
       val.instructions.each_with_index do |inst, j|
-        @core[i + j] = inst
+        @core[(i + j) % @config[:core_size]] = inst
       end
-      val.placed_at(i)
+      val.placed_at(i % @config[:core_size])
     else
       raise "argument must be an Instruction or String"
     end
