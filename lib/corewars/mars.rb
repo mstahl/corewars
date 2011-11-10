@@ -43,18 +43,28 @@ class Mars
     b_value, b_pointer, b_instruction = evaluate_operand(:b, instruction_register, program_counter, current_warrior)
     
     case instruction_register[:opcode]
+    when :dat
+      program_counter = nil
     when :jmp
       program_counter = a_pointer
+    when :mov
+      
     else
-      raise "I can't understand this instruction: #{current_instruction.text_value}"
+      raise "I can't understand this instruction: #{instruction_register[:opcode]}"
     end
     
     # Rotate the process queue
     unless program_counter.nil?
       current_warrior.tasks << program_counter
     end
+    current_warrior.tasks.compact!
     # Rotate the warrior queue
     @warriors << current_warrior
+    
+    # Filter out any warriors that don't have any code executing right now
+    # @warriors.reject! {|w| w.tasks.empty? }
+    
+    # If there is only one warrior left, end the game
   end
   
   # Managing the contents and state of the core ###############################
