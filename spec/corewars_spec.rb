@@ -99,7 +99,6 @@ describe "Corewars" do
       @core[warrior.org + 2].value[:opcode].should == :mul
       @core[warrior.org + 3].value[:opcode].should == :div
       @core[warrior.labels[:foo]].value[:opcode].should == :div
-      @core.process_queue.first.should == warrior.org
     end
     
     it 'should be able to register warriors onto specific addresses' do
@@ -117,7 +116,6 @@ describe "Corewars" do
       @core[2].value[:opcode].should == :mul
       @core[3].value[:opcode].should == :div
       @core[warrior.labels[:foo]].value[:opcode].should == :div
-      @core.process_queue.first.should == warrior.org
     end
     
     it 'should wrap memory around for warrior registration' do

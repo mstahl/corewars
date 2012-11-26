@@ -17,7 +17,7 @@ describe "The MOV instruction" do
     @core[warrior.org].value[:opcode].should == :mov
     @core[warrior.org + 1].value[:opcode].should == :mov
     # And the program counter should've been incremented
-    @core.process_queue.first.should == warrior.org + 1
+    @core.warriors.first.tasks.first.should == warrior.org + 1
   end
   
   # it 'should be able to move backwards' do

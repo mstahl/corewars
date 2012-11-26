@@ -2,7 +2,6 @@ class Mars
   # Simulation variables
   attr_reader :core
   attr_reader :config
-  attr_reader :process_queue
   attr_reader :warriors
   
   def initialize(options = {})
@@ -22,7 +21,6 @@ class Mars
       :separation        => 512,
       :write_limit       => -1
     }.merge options
-    @process_queue = []     # An array of program counters
 
     @core = [Mars.parse("dat #0, #0")] * @config[:core_size]
 
@@ -39,7 +37,6 @@ class Mars
     
     @warriors << warrior
     self[at] = warrior
-    @process_queue << warrior.org
   end
   
   def run ; end
@@ -53,47 +50,58 @@ class Mars
     # Evaluate A operand, with mode
     a_value, a_pointer, a_instruction = evaluate_operand(:a, instruction_register, program_counter, current_warrior)
     b_value, b_pointer, b_instruction = evaluate_operand(:b, instruction_register, program_counter, current_warrior)
-    
+
     case instruction_register[:opcode]
     when :dat
       program_counter = nil
     when :jmp
       program_counter = a_pointer
     when :mov
-      # Pending
+      @core[b_pointer] = @core[a_pointer]
       program_counter += 1
     when :add
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :sub
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :mul
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :div
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :mod
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :jmz
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :jmn
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :djn
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :cmp
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :slt
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     when :spl
       # Pending
+      raise "Not yet implemented."
       program_counter += 1
     # when :org
     # when :equ
@@ -161,12 +169,12 @@ class Mars
     when "#"          # Immediate
       a_pointer = pc + 0
       a_instruction = @core[a_pointer].value
-      a_value = instr[:a]
+      a_value = instr[operand]
     when "$",nil      # Direct
-      if instr[:a].is_a? Symbol then
-        a_pointer = warrior.labels[instr[:a]]
+      if instr[operand].is_a? Symbol then
+        a_pointer = warrior.labels[instr[operand]]
       else
-        a_pointer = pc + instr[:a]
+        a_pointer = instr[operand] ? pc + instr[operand] : nil
       end
     # when "@"          # Indirect
     # when "{"          # A-Indirect Predecrement
@@ -174,7 +182,7 @@ class Mars
     # when "}"          # A-Indirect Postincrement
     # when ">"          # B-Indirect Postincrement
     else
-      raise "Operand mode not (yet?) supported: '#{instr[:a_mode]}'"
+      raise "Operand mode not (yet?) supported: '#{instr[:"#{operand}_mode"]}'"
     end
     
     return [a_value, a_pointer, a_instruction]
