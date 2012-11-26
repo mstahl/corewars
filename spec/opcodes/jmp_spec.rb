@@ -34,7 +34,7 @@ describe "The JMP instruction" do
       jumpto: jmp jumper  ;; Line 6
     }
     @core.register_warrior jumper
-    @core.warriors.first.tasks.first.should == jumper.org + 0
+    @core.warriors.first.tasks.first.should == jumper.org
     @core.step
     @core.warriors.first.tasks.first.should == jumper.org + 6
   end
@@ -51,12 +51,12 @@ describe "The JMP instruction" do
       jumper: jmp jumpto  ;; Line 6
     }
     @core.register_warrior jumper
-    @core.warriors.first.tasks.first.should == jumper.org - 0
+    @core.warriors.first.tasks.first.should == jumper.org
     @core.step
     @core.warriors.first.tasks.first.should == jumper.org - 6
   end
   
-  it 'should be able to jump backwards to a relative address' do
+  it 'should be able to jump backwards to a relative address', wip:true do
     jumper = Warrior.new %q{
               org jumper
       jumpto: jmp 6       ;; Line 0
@@ -68,9 +68,11 @@ describe "The JMP instruction" do
       jumper: jmp -6      ;; Line 6
     }
     @core.register_warrior jumper
-    @core.warriors.first.tasks.first.should == jumper.org - 0
+    @core.warriors.first.tasks.first.should == jumper.org
     @core.step
     @core.warriors.first.tasks.first.should == jumper.org - 6
+    @core.step
+    @core.warriors.first.tasks.first.should == jumper.org
   end
   
 end
