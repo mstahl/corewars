@@ -67,7 +67,7 @@ __END_COMMENTARY__
       warrior.labels[:imp2].should == 1
     end
     
-    # it 'can parse instructions with a modified opcode', :wip => true do
+    # it 'can parse instructions with a modified opcode' do
     #   program = "div.a 9, 3"
     #   warrior = Warrior.new program
     #   warrior.should_not be_nil

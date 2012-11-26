@@ -38,7 +38,7 @@ describe "Corewars" do
       cw.config[:write_limit      ].should == 8
     end
     
-    it 'should throw exception on invalid configuration key', :wip => true do
+    it 'should throw exception on invalid configuration key' do
       (->{ cw = Mars.new :shabbazabba => 8329759.39294 }).should raise_error
     end
     
@@ -54,7 +54,7 @@ describe "Corewars" do
       (->{ @core[9] = 382975.38299904 }).should raise_error
     end
     
-    it 'should wrap around', :wip => true do
+    it 'should wrap around' do
       @core[@core_size + 7] = Mars.parse("dat #13, #17")
       
       @core[@core_size * 3 + 7].value[:opcode].should == :dat

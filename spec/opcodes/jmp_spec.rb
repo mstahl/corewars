@@ -56,7 +56,7 @@ describe "The JMP instruction" do
     @core.warriors.first.tasks.first.should == jumper.org - 6
   end
   
-  it 'should be able to jump backwards to a relative address', wip:true do
+  it 'should be able to jump backwards to a relative address' do
     jumper = Warrior.new %q{
               org jumper
       jumpto: jmp 6       ;; Line 0
