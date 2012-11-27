@@ -60,37 +60,37 @@ class Mars
       @core[b_pointer] = @core[a_pointer]
       program_counter += 1
     when :add
-      raise "Not yet implemented."
+      @core[b_pointer] += @core[a_pointer]
       program_counter += 1
     when :sub
-      raise "Not yet implemented."
+      raise "SUB not yet implemented."
       program_counter += 1
     when :mul
-      raise "Not yet implemented."
+      raise "MUL not yet implemented."
       program_counter += 1
     when :div
-      raise "Not yet implemented."
+      raise "DIV not yet implemented."
       program_counter += 1
     when :mod
-      raise "Not yet implemented."
+      raise "MOD not yet implemented."
       program_counter += 1
     when :jmz
-      raise "Not yet implemented."
+      raise "JMZ not yet implemented."
       program_counter += 1
     when :jmn
-      raise "Not yet implemented."
+      raise "JMN not yet implemented."
       program_counter += 1
     when :djn
-      raise "Not yet implemented."
+      raise "DJN not yet implemented."
       program_counter += 1
     when :cmp
-      raise "Not yet implemented."
+      raise "CMP not yet implemented."
       program_counter += 1
     when :slt
-      raise "Not yet implemented."
+      raise "SLT not yet implemented."
       program_counter += 1
     when :spl
-      raise "Not yet implemented."
+      raise "SPL not yet implemented."
       program_counter += 1
     # when :org
     # when :equ
