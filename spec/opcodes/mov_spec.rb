@@ -14,8 +14,8 @@ describe "The MOV instruction" do
     @core.register_warrior(warrior)
     @core.step
     # Now there should be *two* "mov 0,1" instructions
-    @core[warrior.org].value[:opcode].should == :mov
-    @core[warrior.org + 1].value[:opcode].should == :mov
+    @core[warrior.org][:opcode].should == :mov
+    @core[warrior.org + 1][:opcode].should == :mov
     # And the program counter should've been incremented
     @core.warriors.first.tasks.first.should == warrior.org + 1
   end
@@ -28,8 +28,8 @@ describe "The MOV instruction" do
     @core.register_warrior(warrior)
     @core.step
     # Now there should be *two* "mov 0,1" instructions
-    @core[warrior.org].value[:opcode].should == :mov
-    @core[warrior.org - 1].value[:opcode].should == :mov
+    @core[warrior.org][:opcode].should == :mov
+    @core[warrior.org - 1][:opcode].should == :mov
     # And the program counter should've been incremented
     @core.process_queue.first.should == warrior.org + 1
   end

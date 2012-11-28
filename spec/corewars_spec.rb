@@ -55,19 +55,19 @@ describe "Corewars" do
     end
     
     it 'should wrap around' do
-      @core[@core_size + 7] = Mars.parse("dat #13, #17")
+      @core[@core_size + 7] = Mars.parse("dat #13, #17").value
       
-      @core[@core_size * 3 + 7].value[:opcode].should == :dat
-      @core[@core_size * 17 + 7].value[:a].should == 13
-      @core[7].value[:b].should == 17
+      @core[@core_size * 3 + 7][:opcode].should == :dat
+      @core[@core_size * 17 + 7][:a].should == 13
+      @core[7][:b].should == 17
     end
     
     it 'should be able to get the value of any memory cell' do
       @core[0]    = "mov 0, 1"
-      @core[4096] = Mars.parse("add 8, 9")
+      @core[4096] = Mars.parse("add 8, 9").value
       
-      @core[0].value[:opcode].should    == :mov
-      @core[4096].value[:opcode].should == :add
+      @core[0][:opcode].should    == :mov
+      @core[4096][:opcode].should == :add
     end
     
     it 'should be able to place a Warrior onto the core' do
@@ -77,10 +77,10 @@ describe "Corewars" do
         mul 4, 5
         div 6, 7
       }
-      @core[0].value[:opcode].should == :add
-      @core[1].value[:opcode].should == :sub
-      @core[2].value[:opcode].should == :mul
-      @core[3].value[:opcode].should == :div
+      @core[0][:opcode].should == :add
+      @core[1][:opcode].should == :sub
+      @core[2][:opcode].should == :mul
+      @core[3][:opcode].should == :div
     end
     
     it 'should be able to register warriors' do
@@ -94,11 +94,11 @@ describe "Corewars" do
       @core.warriors.count.should == 1
       warrior.org.should >= 0
       warrior.org.should < @core_size
-      @core[warrior.org + 0].value[:opcode].should == :add
-      @core[warrior.org + 1].value[:opcode].should == :sub
-      @core[warrior.org + 2].value[:opcode].should == :mul
-      @core[warrior.org + 3].value[:opcode].should == :div
-      @core[warrior.labels[:foo]].value[:opcode].should == :div
+      @core[warrior.org + 0][:opcode].should == :add
+      @core[warrior.org + 1][:opcode].should == :sub
+      @core[warrior.org + 2][:opcode].should == :mul
+      @core[warrior.org + 3][:opcode].should == :div
+      @core[warrior.labels[:foo]][:opcode].should == :div
     end
     
     it 'should be able to register warriors onto specific addresses' do
@@ -111,11 +111,11 @@ describe "Corewars" do
       @core.register_warrior warrior, :at => 0
       @core.warriors.count.should == 1
       warrior.org.should == 0
-      @core[0].value[:opcode].should == :add
-      @core[1].value[:opcode].should == :sub
-      @core[2].value[:opcode].should == :mul
-      @core[3].value[:opcode].should == :div
-      @core[warrior.labels[:foo]].value[:opcode].should == :div
+      @core[0][:opcode].should == :add
+      @core[1][:opcode].should == :sub
+      @core[2][:opcode].should == :mul
+      @core[3][:opcode].should == :div
+      @core[warrior.labels[:foo]][:opcode].should == :div
     end
     
     it 'should wrap memory around for warrior registration' do

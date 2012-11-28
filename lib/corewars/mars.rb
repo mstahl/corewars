@@ -22,7 +22,7 @@ class Mars
       :write_limit       => -1
     }.merge options
 
-    @core = [Mars.parse("dat #0, #0")] * @config[:core_size]
+    @core = [Mars.parse("dat #0, #0").value] * @config[:core_size]
 
     @warriors = []
   end
@@ -45,7 +45,7 @@ class Mars
     current_warrior = @warriors.shift
     program_counter = current_warrior.tasks.shift
     
-    instruction_register = @core[program_counter].value
+    instruction_register = @core[program_counter]
     
     # Evaluate A operand, with mode
     a_value, a_pointer, a_instruction = evaluate_operand(:a, instruction_register, program_counter, current_warrior)
@@ -60,13 +60,16 @@ class Mars
       @core[b_pointer] = @core[a_pointer]
       program_counter += 1
     when :add
-      @core[b_pointer] += @core[a_pointer]
+      # @core[b_pointer] += @core[a_pointer]
+      @core[b_pointer][:a] += @core[a_pointer][:a]
+      @core[b_pointer][:b] += @core[a_pointer][:b]
       program_counter += 1
     when :sub
       raise "SUB not yet implemented."
       program_counter += 1
     when :mul
-      raise "MUL not yet implemented."
+      @core[b_pointer][:a] *= @core[a_pointer][:a]
+      @core[b_pointer][:b] *= @core[a_pointer][:b]
       program_counter += 1
     when :div
       raise "DIV not yet implemented."
@@ -120,17 +123,20 @@ class Mars
   end
   
   def []=(i, val)
-    if val.is_a? String then
-      @core[i % @config[:core_size]] = Mars.parse(val)
-    elsif val.is_a? Instruction then
+    case val.class.to_s
+    when 'Hash'
       @core[i % @config[:core_size]] = val
-    elsif val.is_a? Warrior then
+    when 'String'
+      @core[i % @config[:core_size]] = Mars.parse(val).value
+    when 'Instruction'
+      @core[i % @config[:core_size]] = val
+    when 'Warrior'
       val.instructions.each_with_index do |inst, j|
-        @core[(i + j) % @config[:core_size]] = inst
+        @core[(i + j) % @config[:core_size]] = inst.value
       end
       val.placed_at(i % @config[:core_size])
     else
-      raise "argument must be an Instruction or String"
+      raise "argument must be a Hash, String, Instruction, or Warrior, not a #{val.class.name}"
     end
     val
   end

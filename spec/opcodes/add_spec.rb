@@ -17,9 +17,9 @@ describe "The ADD instruction" do
     @core.register_warrior adder
     @core.step
 
-    @core[adder.org + 1].value[:a].should == 3
-    @core[adder.org + 1].value[:b].should == 5
-    @core[adder.org + 2].value[:a].should == 10
-    @core[adder.org + 2].value[:b].should == 14
+    @core[adder.org + 1][:a].should == 3
+    @core[adder.org + 1][:b].should == 5
+    @core[adder.org + 2][:a].should == 10
+    @core[adder.org + 2][:b].should == 14
   end
 end

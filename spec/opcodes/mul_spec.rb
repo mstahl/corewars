@@ -17,9 +17,9 @@ describe "The MUL instruction" do
     @core.register_warrior warrior
     @core.step
 
-    @core[warrior.org + 1].value[:a].should == 3
-    @core[warrior.org + 1].value[:b].should == 5
-    @core[warrior.org + 2].value[:a].should == 21
-    @core[warrior.org + 2].value[:b].should == 45
+    @core[warrior.org + 1][:a].should == 3
+    @core[warrior.org + 1][:b].should == 5
+    @core[warrior.org + 2][:a].should == 21
+    @core[warrior.org + 2][:b].should == 45
   end
 end
