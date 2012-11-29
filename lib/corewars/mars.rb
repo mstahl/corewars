@@ -76,7 +76,8 @@ class Mars
       @core[b_pointer][:b] = @core[a_pointer][:b] / @core[b_pointer][:b]
       program_counter += 1
     when :mod
-      raise "MOD not yet implemented."
+      @core[b_pointer][:a] = @core[a_pointer][:a] % @core[b_pointer][:a]
+      @core[b_pointer][:b] = @core[a_pointer][:b] % @core[b_pointer][:b]
       program_counter += 1
     when :jmz
       raise "JMZ not yet implemented."
