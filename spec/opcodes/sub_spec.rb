@@ -2,12 +2,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 require 'pp'
 
-describe "The MUL instruction" do
+describe "The SUB instruction" do
   before(:each) do
     @core = Mars.new
   end
 
-  it 'should be able to add two numbers' do
+  it 'should be able to subtract two numbers' do
     warrior = Warrior.new %q{
                org warrior
       warrior: sub 1, 2

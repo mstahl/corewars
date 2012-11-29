@@ -7,7 +7,7 @@ describe "The MUL instruction" do
     @core = Mars.new
   end
 
-  it 'should be able to add two numbers' do
+  it 'should be able to multiply two numbers' do
     warrior = Warrior.new %q{
                org warrior
       warrior: mul 1, 2
