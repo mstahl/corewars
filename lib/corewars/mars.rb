@@ -60,12 +60,12 @@ class Mars
       @core[b_pointer] = @core[a_pointer]
       program_counter += 1
     when :add
-      # @core[b_pointer] += @core[a_pointer]
       @core[b_pointer][:a] += @core[a_pointer][:a]
       @core[b_pointer][:b] += @core[a_pointer][:b]
       program_counter += 1
     when :sub
-      raise "SUB not yet implemented."
+      @core[b_pointer][:a] = @core[a_pointer][:a] - @core[b_pointer][:a]
+      @core[b_pointer][:b] = @core[a_pointer][:b] - @core[b_pointer][:b]
       program_counter += 1
     when :mul
       @core[b_pointer][:a] *= @core[a_pointer][:a]

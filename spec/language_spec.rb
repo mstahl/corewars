@@ -66,14 +66,15 @@ __END_COMMENTARY__
       warrior.labels[:imp].should == 0
       warrior.labels[:imp2].should == 1
     end
-    
-    # it 'can parse instructions with a modified opcode', :wip => true do
-    #   program = "div.a 9, 3"
-    #   warrior = Warrior.new program
-    #   warrior.should_not be_nil
-    #   warrior.instructions.first.value[:opcode].should == :div
-    #   warrior.instructions.first.value[:modifier].should == :a
-    # end
+
+    it 'can parse instructions with a modified opcode' do
+      pending "Not yet implemented."
+      program = "div.a 9, 3"
+      warrior = Warrior.new program
+      warrior.should_not be_nil
+      warrior.instructions.first.value[:opcode].should == :div
+      warrior.instructions.first.value[:modifier].should == :a
+    end
   end
   
   context 'parsing errors and handling them' do
