@@ -11,14 +11,14 @@ describe "The DIV instruction" do
     warrior = Warrior.new %q{
                org warrior
       warrior: div 1, 2
-               dat #32, #27
                dat #4 , #3
+               dat #32, #27
     }
     @core.register_warrior warrior
     @core.step
 
-    @core[warrior.org + 1][:a].should == 32
-    @core[warrior.org + 1][:b].should == 27
+    @core[warrior.org + 1][:a].should == 4
+    @core[warrior.org + 1][:b].should == 3
     @core[warrior.org + 2][:a].should == 8
     @core[warrior.org + 2][:b].should == 9
   end

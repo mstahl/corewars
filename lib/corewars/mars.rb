@@ -72,8 +72,8 @@ class Mars
       @core[b_pointer][:b] *= @core[a_pointer][:b]
       program_counter += 1
     when :div
-      @core[b_pointer][:a] = @core[a_pointer][:a] / @core[b_pointer][:a]
-      @core[b_pointer][:b] = @core[a_pointer][:b] / @core[b_pointer][:b]
+      @core[b_pointer][:a] = @core[b_pointer][:a] / @core[a_pointer][:a]
+      @core[b_pointer][:b] = @core[b_pointer][:b] / @core[a_pointer][:b]
       program_counter += 1
     when :mod
       @core[b_pointer][:a] = @core[a_pointer][:a] % @core[b_pointer][:a]
