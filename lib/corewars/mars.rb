@@ -93,7 +93,6 @@ class Mars
       end
     when :djn
       raise "DJN not yet implemented."
-      program_counter += 1
     when :cmp
       raise "CMP not yet implemented."
       program_counter += 1
