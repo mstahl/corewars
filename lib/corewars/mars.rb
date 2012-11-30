@@ -80,8 +80,11 @@ class Mars
       @core[b_pointer][:b] = @core[b_pointer][:b] % @core[a_pointer][:b]
       program_counter += 1
     when :jmz
-      raise "JMZ not yet implemented."
-      program_counter += 1
+      if b_value.zero? then
+        program_counter = a_pointer
+      else
+        program_counter += 1
+      end
     when :jmn
       raise "JMN not yet implemented."
       program_counter += 1
@@ -165,7 +168,7 @@ class Mars
     case instr["#{operand}_mode".to_sym]
     when "#"          # Immediate
       a_pointer = pc + 0
-      a_instruction = @core[a_pointer].value
+      a_instruction = @core[a_pointer]
       a_value = instr[operand]
     when "$",nil      # Direct
       if instr[operand].is_a? Symbol then
