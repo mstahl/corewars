@@ -77,5 +77,9 @@ describe "The JMZ instruction" do
       @core.warriors.first.tasks.first.should == jumper.org
     end
   end
+
+  context 'with nonzero B-argument' do
+    pending "TODO"
+  end
   
 end

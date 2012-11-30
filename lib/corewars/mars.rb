@@ -86,8 +86,11 @@ class Mars
         program_counter += 1
       end
     when :jmn
-      raise "JMN not yet implemented."
-      program_counter += 1
+      if b_value != 0 then
+        program_counter = a_pointer
+      else
+        program_counter += 1
+      end
     when :djn
       raise "DJN not yet implemented."
       program_counter += 1
