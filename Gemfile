@@ -13,5 +13,6 @@ group :development do
   gem "cucumber"
   gem "bundler"
   gem "jeweler"
+  gem "nyan-cat-formatter", git: "git://github.com/mattsears/nyan-cat-formatter.git"
   gem "simplecov"
 end

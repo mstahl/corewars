@@ -74,7 +74,6 @@ describe "Redcode Language" do
     context 'with a modified opcode' do
       it 'should understand the :a modifier' do
         warrior = Warrior.new "div.a 9, 3"
-        p warrior.instructions.first.value
         warrior.instructions.first.value[:modifier].should == :a
       end
 

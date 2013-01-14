@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/mattsears/nyan-cat-formatter.git
+  revision: 5a483e4014d42b2ed3284dcbe6af3d4d23342273
+  specs:
+    nyan-cat-formatter (0.2.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -45,6 +51,7 @@ DEPENDENCIES
   bundler
   cucumber
   jeweler
+  nyan-cat-formatter!
   polyglot
   rspec
   simplecov
