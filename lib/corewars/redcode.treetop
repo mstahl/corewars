@@ -25,7 +25,7 @@ grammar Redcode
       end
     }
   end
-  
+
   rule operation
     opcode m:( "." modifier )? <Operation>
   end
@@ -35,7 +35,7 @@ grammar Redcode
   end
   
   rule modifier
-    "a" / "b" / "ab" / "ba" / "f" / "x" / "i"
+    "ab" / "ba" / "a" / "b" / "f" / "x" / "i"
   end
   
   rule mode

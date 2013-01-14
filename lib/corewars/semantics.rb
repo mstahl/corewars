@@ -26,7 +26,7 @@ class Operation < Treetop::Runtime::SyntaxNode
   def value
     {
       :opcode   => opcode.text_value.to_sym,
-      :modifier => defined? modifier ? nil : modifier.text_value.to_sym
+      :modifier => m.text_value.empty? ? nil : m.text_value.gsub(/^\./, '').to_sym
     }
   end
 end

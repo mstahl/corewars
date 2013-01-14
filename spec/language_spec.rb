@@ -4,13 +4,13 @@ describe "Redcode Language" do
   context "Parsing" do
     
     it 'ignores comments' do
-      commentary_text = <<__END_COMMENTARY__
-; This is a comment
-; So is this
-;and this
-org foo
-mov 0,1   ; Comments are allowed after code, too!
-__END_COMMENTARY__
+      commentary_text = %{
+        ; This is a comment
+        ; So is this
+        ;and this
+        org foo
+        mov 0,1   ; Comments are allowed after code, too!
+      }
       
       commentary = Warrior.new commentary_text
       commentary.should_not be_nil
@@ -61,19 +61,52 @@ __END_COMMENTARY__
     end
     
     it 'collects labels attached to instructions' do
-      warrior = Warrior.new "org imp\nimp: mov imp, imp2\nimp2: dat 0,0"
+      warrior = Warrior.new %{
+              org imp
+        imp:  mov imp, imp2
+        imp2: dat 0,0
+      }
       warrior.should_not be_nil
       warrior.labels[:imp].should == 0
       warrior.labels[:imp2].should == 1
     end
 
-    it 'can parse instructions with a modified opcode' do
-      pending "Not yet implemented."
-      program = "div.a 9, 3"
-      warrior = Warrior.new program
-      warrior.should_not be_nil
-      warrior.instructions.first.value[:opcode].should == :div
-      warrior.instructions.first.value[:modifier].should == :a
+    context 'with a modified opcode' do
+      it 'should understand the :a modifier' do
+        warrior = Warrior.new "div.a 9, 3"
+        p warrior.instructions.first.value
+        warrior.instructions.first.value[:modifier].should == :a
+      end
+
+      it 'should understand the :b modifier' do
+        warrior = Warrior.new "div.b 9, 3"
+        warrior.instructions.first.value[:modifier].should == :b
+      end
+
+      it 'should understand the :ab modifier' do
+        warrior = Warrior.new "div.ab 9, 3"
+        warrior.instructions.first.value[:modifier].should == :ab
+      end
+
+      it 'should understand the :ba modifier' do
+        warrior = Warrior.new "div.ba 9, 3"
+        warrior.instructions.first.value[:modifier].should == :ba
+      end
+
+      it 'should understand the :f modifier' do
+        warrior = Warrior.new "div.f 9, 3"
+        warrior.instructions.first.value[:modifier].should == :f
+      end
+
+      it 'should understand the :x modifier' do
+        warrior = Warrior.new "div.x 9, 3"
+        warrior.instructions.first.value[:modifier].should == :x
+      end
+
+      it 'should understand the :i modifier' do
+        warrior = Warrior.new "div.i 9, 3"
+        warrior.instructions.first.value[:modifier].should == :i
+      end
     end
   end
   
