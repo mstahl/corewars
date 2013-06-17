@@ -51,6 +51,9 @@ class Mars
     a_value, a_pointer, a_instruction = evaluate_operand(:a, instruction_register, program_counter, current_warrior)
     b_value, b_pointer, b_instruction = evaluate_operand(:b, instruction_register, program_counter, current_warrior)
 
+    pp [a_value, a_pointer, a_instruction]
+    pp [b_value, b_pointer, b_instruction]
+
     case instruction_register[:opcode]
     when :dat
       program_counter = nil
@@ -93,9 +96,15 @@ class Mars
       end
     when :djn
       raise "DJN not yet implemented."
-    when :cmp
-      raise "CMP not yet implemented."
-      program_counter += 1
+    when :cmp, :seq
+      puts "a_value = '#{a_value}', b_value = '#{b_value}'"
+      if a_value == b_value
+        puts "HI"
+        program_counter += 2
+      else
+        puts "HIHI"
+        program_counter += 1
+      end
     when :slt
       raise "SLT not yet implemented."
       program_counter += 1
